@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 import { MessageService } from './message.service';
 
@@ -17,18 +17,18 @@ export class MessageComponent {
 	@Input()
 	message: Message;
 
-	@Output()
-	editClicked: EventEmitter<string> = new EventEmitter();
-
 	constructor(private messageService: MessageService) {}
 
 	// Component Functionality Methods
 	onEdit(): void {
-		this.editClicked.emit('Jorge');
+		this.messageService.editMessage(this.message);
 	}
 
 	onDelete(): void {
-		this.messageService.deleteMessage(this.message);
+		this.messageService.deleteMessage(this.message).subscribe(
+			res => console.log(res),
+			err => console.log(err)
+		);
 	}
 
 }

@@ -8,7 +8,7 @@ import { Message } from './message.model';
 	selector: 'na-message-list',
 	template: `
 		<div class="col-md-8 col-md-offset-2">
-			<na-message *ngFor="let message of messages" [message]="message" (editClicked)="message.content = $event"></na-message>
+			<na-message *ngFor="let message of messages" [message]="message"></na-message>
 		</div>
 	`
 })
@@ -19,7 +19,9 @@ export class MessageListComponent implements OnInit {
 
 	// Initialisation Methods
 	ngOnInit(): void {
-		this.messages = this.messageService.getMessages();
+		this.messageService.getMessages().subscribe(
+			(messages: Message[]) => this.messages = messages
+		);
 	}
 
 }
