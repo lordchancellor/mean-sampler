@@ -3,6 +3,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import { AuthService } from './auth.service';
+import { ErrorService } from '../errors/error.service';
 
 import { User } from './user.model';
 import { Storage } from '../enums/storage';
@@ -15,7 +16,7 @@ export class SigninComponent implements OnInit {
 
 	signinForm: FormGroup;
 
-	constructor(private router: Router, private authService: AuthService) {}
+	constructor(private router: Router, private authService: AuthService, private errorService: ErrorService) {}
 
 	// Initialisation Methods
 	ngOnInit(): void {
@@ -39,7 +40,10 @@ export class SigninComponent implements OnInit {
 
 				this.router.navigateByUrl('/');
 			},
-			err => console.log(err)
+			err => {
+				console.log(err);
+				this.errorService.handleError(err);
+			}
 		);
 
 		this.signinForm.reset();

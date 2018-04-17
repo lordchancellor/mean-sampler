@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 
+import { ErrorService } from '../errors/error.service';
+
 import { AuthService } from './auth.service';
 import { User } from './user.model';
 
@@ -12,7 +14,7 @@ export class SignupComponent implements OnInit {
 
 	signupForm: FormGroup;
 
-	constructor(private authService: AuthService) {}
+	constructor(private authService: AuthService, private errorService: ErrorService) {}
 
 	// Initialisation Methods
 	ngOnInit(): void {
@@ -32,7 +34,10 @@ export class SignupComponent implements OnInit {
 
 		this.authService.signUp(user).subscribe(
 			res => console.log(res),
-			err => console.log(err)
+			err => {
+				console.log(err);
+				this.errorService.handleError(err);
+			}
 		);
 		this.signupForm.reset();
 	}

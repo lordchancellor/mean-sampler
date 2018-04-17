@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 
 import { MessageService } from './message.service';
+import { ErrorService } from '../errors/error.service';
 
 import { Message } from './message.model';
 
@@ -13,7 +14,7 @@ export class MessageInputComponent implements OnInit {
 
 	message: Message;
 
-	constructor(private messageService: MessageService) {}
+	constructor(private messageService: MessageService, private errorService: ErrorService) {}
 
 	// Initialisation Methods
 	ngOnInit(): void {
@@ -32,7 +33,10 @@ export class MessageInputComponent implements OnInit {
 
 			this.messageService.updateMessage(this.message).subscribe(
 				res => console.log(res),
-				err => console.log(err)
+				err => {
+					console.log(err);
+					this.errorService.handleError(err);
+				}
 			);
 
 			this.message = null;
@@ -42,7 +46,10 @@ export class MessageInputComponent implements OnInit {
 	
 			this.messageService.addMessage(message).subscribe(
 				res => console.log(res),
-				err => console.log(err)
+				err => {
+					console.log(err);
+					this.errorService.handleError(err);
+				}
 			);
 		}
 

@@ -6,6 +6,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { routing } from './app.routing';
 
 import { AuthService } from './auth/auth.service';
+import { ErrorService } from './errors/error.service';
 
 import { AppComponent } from './app.component';
 
@@ -21,6 +22,8 @@ import { LogoutComponent } from './auth/logout.component';
 import { SigninComponent } from './auth/signin.component';
 import { SignupComponent } from './auth/signup.component';
 
+import { ErrorComponent } from './errors/error.component';
+
 const messageComponents: any[] = [
     MessagesComponent,
     MessageComponent,
@@ -33,14 +36,15 @@ const authComponents: any[] = [
     LogoutComponent,
     SigninComponent,
     SignupComponent
-]
+];
 
 @NgModule({
     declarations: [
         AppComponent,
         HeaderComponent,
         messageComponents,
-        authComponents
+        authComponents,
+        ErrorComponent
     ],
     imports: [
         BrowserModule,
@@ -50,7 +54,8 @@ const authComponents: any[] = [
         routing
     ],
     providers: [
-        AuthService
+        AuthService,
+        ErrorService
     ],
     bootstrap: [
         AppComponent

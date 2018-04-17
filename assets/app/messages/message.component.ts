@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 
 import { MessageService } from './message.service';
+import { ErrorService } from '../errors/error.service';
 
 import { Message } from './message.model';
 import { Storage } from '../enums/storage';
@@ -18,7 +19,7 @@ export class MessageComponent {
 	@Input()
 	message: Message;
 
-	constructor(private messageService: MessageService) {}
+	constructor(private messageService: MessageService, private errorService: ErrorService) {}
 
 	// Component Functionality Methods
 	onEdit(): void {
@@ -28,7 +29,10 @@ export class MessageComponent {
 	onDelete(): void {
 		this.messageService.deleteMessage(this.message).subscribe(
 			res => console.log(res),
-			err => console.log(err)
+			err => {
+				console.log(err);
+				this.errorService.handleError(err);
+			}
 		);
 	}
 

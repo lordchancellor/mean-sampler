@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { MessageService } from './message.service';
+import { ErrorService } from '../errors/error.service';
 
 import { Message } from './message.model';
 
@@ -15,12 +16,16 @@ import { Message } from './message.model';
 export class MessageListComponent implements OnInit {
 	messages: Message[];
 
-	constructor(private messageService: MessageService) {}
+	constructor(private messageService: MessageService, private errorService: ErrorService) {}
 
 	// Initialisation Methods
 	ngOnInit(): void {
 		this.messageService.getMessages().subscribe(
-			(messages: Message[]) => this.messages = messages
+			(messages: Message[]) => this.messages = messages,
+			err => {
+				console.log(err);
+				this.errorService.handleError(err);
+			}
 		);
 	}
 
