@@ -4,6 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 
 import { Message } from './message.model';
+import { Storage } from '../enums/storage';
 
 @Injectable()
 export class MessageService {
@@ -14,13 +15,14 @@ export class MessageService {
 	constructor(private http: HttpClient) {}
 
 	addMessage(message: Message): Observable<any> {
-		const url: string = 'http://localhost:3000/message';
+		const token: string = localStorage.getItem(Storage.Token) ? `?token=${localStorage.getItem(Storage.Token)}` : ``;
+		const url: string = `http://localhost:3000/message${token}`;
 		const body: string = JSON.stringify(message);
 		const headers: HttpHeaders = new HttpHeaders().set('Content-Type', 'application/json');
 
 		return this.http.post(url, body, { headers })
 			.map((res: any) => {
-				const message: Message = new Message(res.obj.content, 'User', res.obj._id, null);
+				const message: Message = new Message(res.obj.content, res.obj.user.firstName, res.obj._id, res.obj.user._id);
 
 				this.messages.push(message);
 
@@ -37,7 +39,7 @@ export class MessageService {
 				let transformedMessages: Message[] = [];
 
 				for (const message of messages) {
-					transformedMessages = [ ...transformedMessages, new Message(message.content, 'User', message._id, null) ];
+					transformedMessages = [ ...transformedMessages, new Message(message.content, message.user.firstName, message._id, message.user._id) ];
 				}
 
 				this.messages = transformedMessages;
@@ -51,7 +53,8 @@ export class MessageService {
 	}
 
 	updateMessage(message: Message): Observable<any> {
-		const url: string = `http://localhost:3000/message/${message.messageId}`;
+		const token: string = localStorage.getItem(Storage.Token) ? `?token=${localStorage.getItem(Storage.Token)}` : ``;
+		const url: string = `http://localhost:3000/message/${message.messageId}${token}`;
 		const body: string = JSON.stringify(message);
 		const headers: HttpHeaders = new HttpHeaders().set('Content-Type', 'application/json');
 
@@ -59,7 +62,8 @@ export class MessageService {
 	}
 
 	deleteMessage(message: Message): Observable<any> {
-		const url: string = `http://localhost:3000/message/${message.messageId}`;
+		const token: string = localStorage.getItem(Storage.Token) ? `?token=${localStorage.getItem(Storage.Token)}` : ``;
+		const url: string = `http://localhost:3000/message/${message.messageId}${token}`;
 
 		this.messages.splice(this.messages.indexOf(message), 1);
 

@@ -3,6 +3,7 @@ import { Component, Input } from '@angular/core';
 import { MessageService } from './message.service';
 
 import { Message } from './message.model';
+import { Storage } from '../enums/storage';
 
 @Component({
 	selector: 'na-message',
@@ -29,6 +30,10 @@ export class MessageComponent {
 			res => console.log(res),
 			err => console.log(err)
 		);
+	}
+
+	belongsToUser(): boolean {
+		return localStorage.getItem(Storage.UserID) === this.message.userId;
 	}
 
 }
