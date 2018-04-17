@@ -1,5 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+
+import { AuthService } from './auth.service';
+
+import { User } from './user.model';
+import { Storage } from '../enums/storage';
 
 @Component({
 	selector: 'na-signin',
@@ -8,6 +14,8 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 export class SigninComponent implements OnInit {
 
 	signinForm: FormGroup;
+
+	constructor(private router: Router, private authService: AuthService) {}
 
 	// Initialisation Methods
 	ngOnInit(): void {
@@ -20,7 +28,20 @@ export class SigninComponent implements OnInit {
 
 	// Component Functionality Methods
 	onSubmit(): void {
-		console.log(this.signinForm);
+		const formData: any = this.signinForm.value;
+		const user: User = new User(formData.email, formData.password);
+
+		this.authService.signIn(user).subscribe(
+			res => {
+				console.log(res);
+				localStorage.setItem(Storage.Token, res.token);
+				localStorage.setItem(Storage.UserID, res.userId);
+
+				this.router.navigateByUrl('/');
+			},
+			err => console.log(err)
+		);
+
 		this.signinForm.reset();
 	}
 

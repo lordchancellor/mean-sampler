@@ -5,6 +5,8 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { routing } from './app.routing';
 
+import { AuthService } from './auth/auth.service';
+
 import { AppComponent } from './app.component';
 
 import { HeaderComponent } from './header.component';
@@ -46,6 +48,9 @@ const authComponents: any[] = [
         ReactiveFormsModule,
         HttpClientModule,
         routing
+    ],
+    providers: [
+        AuthService
     ],
     bootstrap: [
         AppComponent
